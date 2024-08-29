@@ -53,6 +53,7 @@ import AppointmentDetails  from './Components/Admin/Appointment/AppointmentDetai
 //import AddAppointment from './Components/Admin/Appointment/AddAppointment';
 //import UpdateAppointment from './Components/Admin/Appointment/UpdateAppointment';
 //import Appointment from './Components/Admin/Appointment/Appointment';
+import AppointmentForm from './Components/Admin/Appointment/AppointmentForm';
 
 import Register from './Components/pages/Register';
 
@@ -71,7 +72,7 @@ function App() {
         <Route path='/About' element={<AboutUs/>}/>
         <Route path='/Contact' element={<Contact/>}/>
         <Route path='/signup' element={<Register/>}/>
-
+        <Route path='appointment' element={<AppointmentForm/>}/>
 
         <Route path="/admindashboard" element={<AdminDashboard />}>
           <Route path="user-management" element={<UserDetails />} />
@@ -108,6 +109,7 @@ function App() {
           <Route path='Order-Management' element={<OrderDetails />} />
 
           <Route path="appointment-management" element={<AppointmentDetails />} />
+          {/* <Route path="/appointment" element={<AppointmentForm/>} /> */}
 
 
 
