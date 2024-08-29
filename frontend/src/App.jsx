@@ -71,6 +71,7 @@ function App() {
         <Route path="/Contact" element={<Contact />} />
         <Route path="/signup" element={<Register />} />
         <Route path="/appointment" element={<AppointmentForm />} />
+        <Route path="/app" element={<AppointmentDetails/>} />
 
         <Route path="/admindashboard" element={<AdminDashboard />}>
           <Route path="user-management" element={<UserDetails />} />
