@@ -2,24 +2,12 @@ const Appointment = require("../Model/AppointmentModel");
 
 exports.createAppointment = async (req, res) => {
   try {
-    const {
-      customerId,
-      employeeId,
-      date,
-      timeSlot,
-      serviceType,
-      status,
-      notes,
-    } = req.body;
+    const { customerId, dateTime, status } = req.body;
 
     const newAppointment = new Appointment({
       customerId,
-      employeeId,
-      date,
-      timeSlot,
-      serviceType,
+      dateTime,
       status,
-      notes,
     });
 
     await newAppointment.save();
@@ -60,11 +48,11 @@ exports.getAppointmentById = async (req, res) => {
 exports.updateAppointment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { date, timeSlot, serviceType, status, notes } = req.body;
+    const { dateTime, status } = req.body;
 
     const appointment = await Appointment.findByIdAndUpdate(
       id,
-      { date, timeSlot, serviceType, status, notes },
+      { dateTime, status },
       { new: true }
     );
 

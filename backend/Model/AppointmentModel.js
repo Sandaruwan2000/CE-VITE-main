@@ -3,22 +3,11 @@ const Schema = mongoose.Schema;
 
 const AppointmentSchema = new Schema({
   customerId: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true,
+    ref: "User",
   },
-  employeeId: {
-    type: String,
-    required: true,
-  },
-  date: {
-    type: Date,
-    required: true,
-  },
-  timeSlot: {
-    type: String,
-    required: true,
-  },
-  serviceType: {
+  dateTime: {
     type: String,
     required: true,
   },
@@ -26,9 +15,6 @@ const AppointmentSchema = new Schema({
     type: String,
     enum: ["Scheduled", "Completed", "Cancelled"],
     default: "Scheduled",
-  },
-  notes: {
-    type: String,
   },
 });
 
