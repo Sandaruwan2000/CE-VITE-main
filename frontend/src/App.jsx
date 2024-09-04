@@ -52,9 +52,9 @@ import AppointmentDetails from "./Components/Admin/Appointment/AppointmentDetail
 //import AddAppointment from './Components/Admin/Appointment/AddAppointment';
 //import UpdateAppointment from './Components/Admin/Appointment/UpdateAppointment';
 //import Appointment from './Components/Admin/Appointment/Appointment';
-import AppointmentForm from "./Components/Admin/Appointment/AppointmentForm";
 
 import Register from "./Components/pages/Register";
+import AppointmentForm from "./Components/Admin/Appointment/AppointmentForm";
 
 function App() {
   return (
@@ -107,12 +107,11 @@ function App() {
 
           <Route path="Order-Management" element={<OrderDetails />} />
 
-          <Route
-            path="appointment-management"
-            element={<AppointmentDetails />}
-          />
-          {/* <Route path="/appointment" element={<AppointmentForm/>} /> */}
+          
+          
         </Route>
+        <Route path="appointment-management" element={<AppointmentDetails />}/>
+        <Route path="/appointment" element={<AppointmentForm/>} />
         <Route path="/" element={<NotFound />} />
       </Routes>
     </Router>

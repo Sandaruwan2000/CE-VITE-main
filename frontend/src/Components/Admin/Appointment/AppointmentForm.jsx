@@ -3,7 +3,6 @@ import {
   TextField,
   Button,
   Grid,
-  MenuItem,
   Typography,
   Paper,
   Container,
@@ -11,13 +10,17 @@ import {
 
 const AppointmentForm = () => {
   const [formData, setFormData] = useState({
-    customerId: '',
-    employeeId: '',
+    email: 'saman@gmail.com',
+    subject: '',
+    phone: '',
     date: '',
-    timeSlot: '',
-    serviceType: '',
-    status: 'Scheduled',
-    notes: '',
+    time: '',
+    note: '',
+  });
+  
+  const [errors, setErrors] = useState({
+    time: '',
+    phone: '',
   });
 
   const handleChange = (e) => {
@@ -27,8 +30,38 @@ const AppointmentForm = () => {
     });
   };
 
+  const validateTimeSlot = (time) => {
+    // Regular expression to match time format "2:00 PM to 4:00 PM"
+    const timePattern = /^([01]?[0-9]|2[0-3]):([0-5][0-9]) (AM|PM) to ([01]?[0-9]|2[0-3]):([0-5][0-9]) (AM|PM)$/;
+    return timePattern.test(time);
+  };
+
+  const validatePhone = (phone) => {
+    // Regular expression to match exactly 10 digits starting with 0
+    const phonePattern = /^0\d{9}$/;
+    return phonePattern.test(phone);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate time slot
+    if (!validateTimeSlot(formData.time)) {
+      setErrors({
+        ...errors,
+        time: 'Time slot must be in the format "2:00 PM to 4:00 PM"',
+      });
+      return;
+    }
+
+    // Validate phone number
+    if (!validatePhone(formData.phone)) {
+      setErrors({
+        ...errors,
+        phone: 'Phone number must start with 0 and be exactly 10 digits long',
+      });
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:4000/appointments', {
@@ -41,20 +74,21 @@ const AppointmentForm = () => {
 
       if (response.ok) {
         alert('Appointment added successfully!');
+        // Reset form data
         setFormData({
-          customerId: '',
-          employeeId: '',
+          subject: '',
+          phone: '',
           date: '',
-          timeSlot: '',
-          serviceType: '',
-          status: 'Scheduled',
-          notes: '',
+          time: '',
+          note: '',
         });
+        setErrors({ time: '', phone: '' }); // Clear errors
       } else {
         alert('Error adding appointment!');
       }
     } catch (error) {
       console.error('Error:', error);
+      alert('An error occurred while submitting the form.');
     }
   };
 
@@ -69,9 +103,9 @@ const AppointmentForm = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Customer ID"
-                name="customerId"
-                value={formData.customerId}
+                label="Subject"
+                name="subject"
+                value={formData.subject}
                 onChange={handleChange}
                 required
               />
@@ -79,11 +113,18 @@ const AppointmentForm = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Employee ID"
-                name="employeeId"
-                value={formData.employeeId}
+                label="Phone"
+                type="text" // Changed from number to text to handle exact 10 digit input
+                name="phone"
+                placeholder='0123456789'
+                value={formData.phone}
                 onChange={handleChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 required
+                error={!!errors.phone}
+                helperText={errors.phone}
               />
             </Grid>
             <Grid item xs={12}>
@@ -104,42 +145,21 @@ const AppointmentForm = () => {
               <TextField
                 fullWidth
                 label="Time Slot"
-                name="timeSlot"
-                value={formData.timeSlot}
+                name="time"
+                value={formData.time}
                 onChange={handleChange}
+                placeholder="2:00 PM to 4:00 PM"
                 required
+                error={!!errors.time}
+                helperText={errors.time}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Service Type"
-                name="serviceType"
-                value={formData.serviceType}
-                onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                select
-                label="Status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-              >
-                <MenuItem value="Scheduled">Scheduled</MenuItem>
-                <MenuItem value="Completed">Completed</MenuItem>
-                <MenuItem value="Cancelled">Cancelled</MenuItem>
-              </TextField>
             </Grid>
             <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Notes"
-                name="notes"
-                value={formData.notes}
+                name="note"
+                value={formData.note}
                 onChange={handleChange}
                 multiline
                 rows={4}

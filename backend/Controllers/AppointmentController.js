@@ -2,11 +2,15 @@ const Appointment = require("../Model/AppointmentModel");
 
 exports.createAppointment = async (req, res) => {
   try {
-    const { customerId, dateTime, status } = req.body;
+    const { email,subject,phone, date,time,note, status } = req.body;
 
     const newAppointment = new Appointment({
-      customerId,
-      dateTime,
+      email,
+      subject,
+      phone,
+      date,
+      time,
+      note,
       status,
     });
 

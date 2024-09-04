@@ -2,15 +2,32 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const AppointmentSchema = new Schema({
-  customerId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
-  dateTime: {
+  email: {
     type: String,
     required: true,
   },
+  subject: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  time: {
+    type: String,
+    required: true,
+  },
+
+  note: {
+    type: String,
+    required: true,
+  },
+
   status: {
     type: String,
     enum: ["Scheduled", "Completed", "Cancelled"],
