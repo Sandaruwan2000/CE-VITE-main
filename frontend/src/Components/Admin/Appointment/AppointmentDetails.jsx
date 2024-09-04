@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const AppointmentDetails = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,6 +46,53 @@ const AppointmentDetails = () => {
     appointment.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     appointment.phone.toString().includes(searchTerm)
   );
+
+  const handleDownload = () => {
+    const doc = new jsPDF();
+    const marginLeft = 55;
+
+    doc.setDrawColor(0);
+    doc.setLineWidth(2);
+    doc.roundedRect(10, 20, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 40, 10, 10, 'D');
+
+    doc.setFontSize(15);
+    doc.text('Appointments Report', 90, 35);
+
+    const headers = [['Email', 'Phone', 'Subject', 'Date', 'Time', 'Notes', 'Status']];
+    const data = filteredAppointments.map((item) => [
+      item.email,
+      item.phone,
+      item.subject,
+      new Date(item.date).toLocaleDateString(),
+      item.time,
+      item.note,
+      item.status
+    ]);
+
+    const columnStyles = {
+      0: { columnWidth: 35 },
+      1: { columnWidth: 25 },
+      2: { columnWidth: 30 },
+      3: { columnWidth: 30 },
+      4: { columnWidth: 12 },
+      5: { columnWidth: 30 },
+      6: { columnWidth: 20 }
+    };
+
+    const end = "<<< This is an auto-generated report. All rights reserved. >>>";
+
+    doc.autoTable({
+      startY: 50,
+      head: headers,
+      body: data,
+      columnStyles: columnStyles,
+    });
+
+    doc.setFontSize(10);
+    doc.text(end, marginLeft, doc.internal.pageSize.height - 10);
+
+    doc.save('Appointments_Report.pdf');
+  };
 
   return (
     <div className="container">
@@ -96,8 +145,8 @@ const AppointmentDetails = () => {
           padding: 5px 10px;
           border-radius: 5px;
           display: inline-block;
-          width: 100px; /* Fixed width */
-          text-align: center; /* Center the text */
+          width: 100px;
+          text-align: center;
         }
 
         .status.scheduled {
@@ -134,7 +183,9 @@ const AppointmentDetails = () => {
           onChange={handleSearch}
           className="search-input"
         />
-        {/* <button className="add-button">+ Add Appointment</button> */}
+        <button className="add-button" onClick={handleDownload}>
+          Download PDF
+        </button>
       </div>
       <table className="appointments-table">
         <thead>
@@ -175,6 +226,8 @@ const AppointmentDetails = () => {
           ))}
         </tbody>
       </table>
+
+      
     </div>
   );
 };
