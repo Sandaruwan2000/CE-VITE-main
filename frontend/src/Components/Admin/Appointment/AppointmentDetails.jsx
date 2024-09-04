@@ -22,7 +22,7 @@ const AppointmentDetails = () => {
   }, []);
 
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+    setSearchTerm(event.target.value.toLowerCase()); // Convert search term to lowercase
   };
 
   const handleDelete = async (id) => {
@@ -42,10 +42,36 @@ const AppointmentDetails = () => {
     }
   };
 
-  const filteredAppointments = appointments.filter((appointment) =>
-    appointment.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    appointment.phone.toString().includes(searchTerm)
-  );
+  const handleComplete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:4000/appointments/${id}`, {
+        method: 'PUT', // Use PATCH for partial updates
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'Completed' }), // Set the new status
+      });
+  
+      if (response.ok) {
+        // Update the status locally
+        setAppointments(appointments.map((appointment) =>
+          appointment._id === id
+            ? { ...appointment, status: 'Completed' }
+            : appointment
+        ));
+      } else {
+        console.error("Failed to update appointment status");
+      }
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+    }
+  };
+
+  const filteredAppointments = appointments.filter((appointment) => {
+    const emailMatch = appointment.email.toLowerCase().includes(searchTerm);
+    const phoneMatch = appointment.phone.toString().includes(searchTerm);
+    return emailMatch || phoneMatch;
+  });
 
   const handleDownload = () => {
     const doc = new jsPDF();
@@ -173,6 +199,16 @@ const AppointmentDetails = () => {
         .view-button {
           background-color: #4285f4;
         }
+
+        .complete-button {
+          background-color: #4285f4;
+          color: #fff;
+          border: none;
+          padding: 5px 10px;
+          margin-right: 5px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
       `}</style>
 
       <div className="search-container">
@@ -221,13 +257,17 @@ const AppointmentDetails = () => {
                 >
                   Delete
                 </button>
+                <button
+                  className="complete-button"
+                  onClick={() => handleComplete(appointment._id)}
+                >
+                  Complete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      
     </div>
   );
 };
