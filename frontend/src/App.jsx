@@ -71,9 +71,7 @@ function App() {
         <Route path="/About" element={<AboutUs />} />
         <Route path="/Contact" element={<Contact />} />
         <Route path="/signup" element={<Register />} />
-        <Route path="/appointment" element={<AppointmentForm />} />
-        <Route path="/app" element={<AppointmentDetails/>} />
-        <Route path="/appuser" element={<UserViewAppoiment/>} />
+      
 
         <Route path="/admindashboard" element={<AdminDashboard />}>
           <Route path="user-management" element={<UserDetails />} />
@@ -112,8 +110,9 @@ function App() {
           
           
         </Route>
+        <Route path="/appointment" element={<AppointmentForm />} />
+        <Route path="/appuser" element={<UserViewAppoiment/>} />
         <Route path="appointment-management" element={<AppointmentDetails />}/>
-        <Route path="/appointment" element={<AppointmentForm/>} />
         <Route path="/" element={<NotFound />} />
       </Routes>
     </Router>

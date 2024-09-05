@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { FaCheckCircle, FaClock, FaHourglassHalf, FaEdit, FaTrashAlt, FaDownload } from "react-icons/fa";
+import { FaCheckCircle, FaClock, FaHourglassHalf, FaEdit, FaTrashAlt, FaDownload, FaPlus } from "react-icons/fa";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("date");
+
+  const navigate=useNavigate();
 
   // Fetch appointments from API
   useEffect(() => {
@@ -120,6 +123,14 @@ const CustomerAppointments = () => {
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save("appointments.pdf");
     });
+
+
+    
+  };
+
+  const handleAddAppointment = () => {
+    navigate("/appointment");
+    alert("Redirect to 'Add New Appointment' form");
   };
 
   return (
@@ -305,9 +316,13 @@ const CustomerAppointments = () => {
     onChange={handleSearch}
   />
   <div className="buttons-group">
+    <button className="custom-button add-appointment" onClick={handleAddAppointment}>
+          <FaPlus className="button-icon" /> Add New Appointment
+    </button>
     <button className="custom-button" onClick={() => handleSort("date")}>
       <FaClock className="button-icon" /> Sort by Date
     </button>
+    
     <button className="custom-button" onClick={() => handleSort("subject")}>
       <FaEdit className="button-icon" /> Sort by Subject
     </button>
