@@ -55,6 +55,7 @@ import AppointmentDetails from "./Components/Admin/Appointment/AppointmentDetail
 
 import Register from "./Components/pages/Register";
 import AppointmentForm from "./Components/Admin/Appointment/AppointmentForm";
+import UserViewAppoiment from "./Components/Admin/Appointment/UserAppoinmentView";
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
         <Route path="/signup" element={<Register />} />
         <Route path="/appointment" element={<AppointmentForm />} />
         <Route path="/app" element={<AppointmentDetails/>} />
+        <Route path="/appuser" element={<UserViewAppoiment/>} />
 
         <Route path="/admindashboard" element={<AdminDashboard />}>
           <Route path="user-management" element={<UserDetails />} />
